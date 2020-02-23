@@ -1,0 +1,10 @@
+1.mother_of(X, christine).
+2.child_of(catherine, X).
+3.husband_of(X, Y).
+4.wife_of(X, albert).
+5.son_of(sylvain, X).
+6.brother_of(X, Y).
+7.sister_of(X, Y).
+8.father_of(X, christine).
+9.grand_father_of(X, francois).
+10.grand_mother_of(X, nathalie).

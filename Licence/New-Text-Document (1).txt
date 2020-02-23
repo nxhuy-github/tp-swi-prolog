@@ -1,0 +1,70 @@
+********************************************
+takeout(X,[X|R],R).
+takeout(X,[F|R],[F|S]) :- takeout(X,R,S).
+
+perm([X|Y],Z) :- perm(Y,W), takeout(X,Z,W).   
+perm([],[]).
+
+*********************************************
+union([X|Y],Z,W) :- member(X,Z), !,union(Y,Z,W). 
+union([X|Y],Z,[X|W]) :- union(Y,Z,W).
+union([],Z,Z).
+ 
+intersection([X|Y],M,[X|Z]) :- member(X,M), intersection(Y,M,Z).
+intersection([X|Y],M,Z) :- \+ member(X,M), intersection(Y,M,Z).
+intersection([],M,[]).
+
+**********************************************
+mergesort([],[]).    /* covers special case */
+mergesort([A],[A]).
+mergesort([A,B|R],S):-split([A,B|R],L1,L2),mergesort(L1,S1),mergesort(L2,S2),merge(S1,S2,S).
+
+split([],[],[]).
+split([A],[A],[]).
+split([A,B|R],[A|Ra],[B|Rb]) :-  split(R,Ra,Rb).
+
+merge(A,[],A).
+merge([],B,B).
+merge([A|Ra],[B|Rb],[A|M]) :-  A =< B, merge(Ra,[B|Rb],M).
+merge([A|Ra],[B|Rb],[B|M]) :-  A > B,  merge([A|Ra],Rb,M).
+*************************************************
+append([X|Y],Z,[X|W]) :- append(Y,Z,W).
+append([],X,X).
+*************************************************
+solve(P) :-
+     perm([1,2,3,4,5,6,7,8],P), 
+     combine([1,2,3,4,5,6,7,8],P,S,D),
+     all_diff(S),
+     all_diff(D).
+
+combine([X1|X],[Y1|Y],[S1|S],[D1|D]) :-
+     S1 is X1 +Y1,
+     D1 is X1 - Y1,
+     combine(X,Y,S,D).
+combine([],[],[],[]).
+
+all_diff([X|Y]) :-  \+member(X,Y), all_diff(Y).
+all_diff([X]).
+*************************************************
+queens([]).                                                       
+ 
+queens([ Row/Col | Rest]) :-                             
+            queens(Rest),                                       
+            member(Col, [1,2,3,4,5,6,7,8]),          
+            safe( Row/Col, Rest).                           
+                                                                       
+ 
+safe(Anything, []).                                             
+ 
+safe(Row/Col, [Row1/Col1 | Rest]) :-   
+            Col =\= Col1,                                       
+            Col1 - Col =\= Row1 - Row,               
+            Col1 - Col =\= Row - Row1,
+            safe(Row/Col, Rest).                            
+ 
+member(X, [X | Tail]).                          
+ 
+member(X, [Head | Tail]) :-
+            member(X, Tail).
+ 
+board([1/C1, 2/C2, 3/C3, 4/C4, 5/C5, 6/C6, 7/C7, 8/C8]).    
